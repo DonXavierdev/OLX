@@ -14,6 +14,10 @@ def my_view(request):
     data = MyModel.objects.all().values()
     return Response(data)
 
+@api_view(['GET'])
+def myUsers(request):
+    data = User.objects.all().values()
+    return Response(data)
 
 @api_view(['POST'])
 def create_record(request):
