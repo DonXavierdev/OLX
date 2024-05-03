@@ -26,7 +26,8 @@ function LoginForm() {
             
             // If login is successful, store the token in local storage
             localStorage.setItem('token', response.data.token);
-            localStorage.setItem('isLoggedIn', 'true'); // Set a flag to indicate that the user is logged in
+            localStorage.setItem('isLoggedIn', 'true'); 
+            localStorage.setItem('userId', response.data.user_id); 
 
             console.log('Login successful');
             setError('');

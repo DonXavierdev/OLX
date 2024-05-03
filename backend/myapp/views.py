@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from .models import MyModel
+from .models import Items
+from .models import UserItems
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -16,7 +18,29 @@ def my_view(request):
 
 @api_view(['GET'])
 def myUsers(request):
-    data = User.objects.all().values()
+    data = User.objects.filter(pk=1).values()
+    return Response(data)
+@api_view(['POST'])
+def newItem(request):
+    data = json.loads(request.body)
+    item = Items.objects.create(name=data['name'],price=data['price'], description=data['description'],category=data['category'],contact_number=data['contactNumber'])
+    user_id = data.get('userId')
+    user = User.objects.get(pk=user_id)
+    UserItems.objects.create(user=user, item=item)
+    return JsonResponse({'message': 'Item created successfully'}, status=201)
+@api_view(['GET'])
+def showItems(request):
+    data = Items.objects.all().values()
+    return Response(data)
+
+@api_view(['GET'])
+def showUserItems(request):
+    user_id = request.GET.get('userId')
+    user_items = UserItems.objects.filter(user_id=user_id)
+    item_ids = [user_item.item_id for user_item in user_items]
+    items = Items.objects.filter(pk__in=item_ids)
+    data = [{'name': item.name, 'price': item.price, 'category': item.category, 'description': item.description, 'contact_number': item.contact_number} for item in items]
+    
     return Response(data)
 
 @api_view(['POST'])
@@ -54,8 +78,7 @@ def login_user(request):
     user = authenticate(username=username, password=password)
 
     if user is not None:
-        # User is authenticated, generate token
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key}, status=status.HTTP_200_OK)
+        return Response({'token': token.key, 'user_id': user.pk}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

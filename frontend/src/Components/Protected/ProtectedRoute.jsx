@@ -8,6 +8,7 @@ const ProtectedRoute = ({ element, ...rest }) => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userId');
         // Redirect to login page or any other appropriate page
         navigate('/');
     };
