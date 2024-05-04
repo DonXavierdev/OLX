@@ -32,6 +32,7 @@ const ShowUserItems = () => {
                             <li key={index}>
                                 <h3>{item.name}</h3>
                                 <p>Description: {item.description}</p>
+                                <p>id: {item.id}</p>
                                 <p>Price: ${item.price}</p>
                                 <p>Category: {item.category}</p>
                                 <p>Contact Number: {item.contact_number}</p>

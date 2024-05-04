@@ -24,3 +24,12 @@ class UserItems(models.Model):
     def __str__(self):
         return f"User: {self.user.username}, Item: {self.item.name}"
     
+class Purchases(models.Model):
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='buyer_purchases')
+    item = models.ForeignKey(Items, on_delete=models.CASCADE)
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller_purchases')
+
+    def __str__(self):
+        return f"Buyer: {self.buyer.username}, Item: {self.item.name}"
+
+    

@@ -10,6 +10,7 @@ import ProtectedRoute from './Components/Protected/ProtectedRoute';
 import NewItem from './Components/newItem/newItem';
 import ShowItems from './Components/ShowItems/ShowItems';
 import ShowUserItems from './Components/ShowUserItems/ShowUserItems';
+import Requests from './Components/Requests/Requests';
 function App() {
     return (
       <Router>
@@ -24,6 +25,7 @@ function App() {
             <Route path="/addItem" element={ <NewItem/>} />
             <Route path="/showItem" element={ <ShowItems/>} />
             <Route path="/showUserItem" element={ <ShowUserItems/>} />
+            <Route path="/MyRequests" element={ <Requests/>} />
           </Route>
           
           
