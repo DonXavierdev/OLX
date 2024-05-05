@@ -1,7 +1,7 @@
 
 from django.urls import path
 from . import views
-# path('api/del/', views.deleteview),
+
 urlpatterns = [
     path('api/create/', views.create_record),
     path('api/register/', views.register_user),
@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/showUserItems/', views.showUserItems),
     path('api/purchase/', views.Purchase),
     path('api/myPurchases/', views.MyPurchases),
+    path('api/del/', views.deleteview),
     
 
 ]

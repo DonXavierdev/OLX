@@ -12,16 +12,16 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
-# def deleteview(request):
-#     try:
-#         # Delete records from the Items model where id is less than 7
-#         Items.objects.filter(id__lt=7).delete()
+def deleteview(request):
+    try:
+        # Delete records from the Items model where id is less than 7
+        Items.objects.all().delete()
         
-#         # Return a JSON response indicating success
-#         return JsonResponse({'message': 'Records deleted successfully'}, status=200)
-#     except Exception as e:
-#         # Return a JSON response indicating error if any exception occurs
-#         return JsonResponse({'error': str(e)}, status=400)
+        # Return a JSON response indicating success
+        return JsonResponse({'message': 'Records deleted successfully'}, status=200)
+    except Exception as e:
+        # Return a JSON response indicating error if any exception occurs
+        return JsonResponse({'error': str(e)}, status=400)
 @api_view(['GET'])
 def my_view(request):
     data = UserItems.objects.all().values()
@@ -55,13 +55,32 @@ def myUsers(request):
 
 
 @api_view(['POST'])
+
 def newItem(request):
-    data = json.loads(request.body)
-    item = Items.objects.create(name=data['name'],price=data['price'], description=data['description'],category=data['category'],contact_number=data['contactNumber'])
-    user_id = data.get('userId')
-    user = User.objects.get(pk=user_id)
-    UserItems.objects.create(user=user, item=item)
-    return JsonResponse({'message': 'Item created successfully'}, status=201)
+    if request.method == 'POST':
+        image_file = request.FILES.get('image')      
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        category = request.POST.get('category')
+        description = request.POST.get('description')
+        contact_number = request.POST.get('contactNumber')
+        userId = request.GET.get('userId')
+        item = Items.objects.create(
+            name=name,
+            price=price,
+            description=description,
+            category=category,
+            contact_number=contact_number,
+            image=image_file
+        )
+        user = User.objects.get(pk=userId)
+       
+        UserItems.objects.create(user=user, item=item)
+        
+        return JsonResponse({'message': 'Item created successfully'}, status=201)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 
 
 @api_view(['GET'])

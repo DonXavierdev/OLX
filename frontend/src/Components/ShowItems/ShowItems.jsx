@@ -4,6 +4,8 @@ import axios from 'axios';
 const ShowItems = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchName, setSearchName] = useState('');
+    const [searchCategory, setSearchCategory] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,8 +34,39 @@ const ShowItems = () => {
         }
     };
 
+    const handleNameSearch = (event) => {
+        setSearchName(event.target.value);
+    };
+
+    const handleCategorySearch = (event) => {
+        setSearchCategory(event.target.value);
+    };
+
+    const filteredItems = data.filter(item => {
+        return (
+            item.name.toLowerCase().includes(searchName.toLowerCase()) &&
+            item.category.toLowerCase().includes(searchCategory.toLowerCase())
+        );
+    });
+
     return (
         <div>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Search by name..."
+                    value={searchName}
+                    onChange={handleNameSearch}
+                />
+            </div>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Search by category..."
+                    value={searchCategory}
+                    onChange={handleCategorySearch}
+                />
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -46,7 +79,7 @@ const ShowItems = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map(item => (
+                    {filteredItems.map(item => (
                         <tr key={item.id}>
                             <td>{item.id}</td>
                             <td>{item.name}</td>
